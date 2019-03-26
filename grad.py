@@ -300,7 +300,6 @@ def retrieve_information():
 	print("All major classes taken with letter grade? ", letter_grade)
 	print("All minors do not have 5 or more overlapping with major? ", overlap)
 	print("")
-
 	go_back_to_access()
 
 if __name__ == "__main__":

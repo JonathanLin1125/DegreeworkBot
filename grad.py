@@ -34,7 +34,7 @@ def login(username, password):
 	Driver logs into WebAdmin.
 	"""
 	driver.get('https://www.reg.uci.edu')
-	studentAccess = driver.find_element_by_link_text("StudentAccess")
+	studentAccess = driver.find_element_by_link_text("WebAdmin")
 	studentAccess.click()
 
 	login = driver.find_element_by_link_text("Click here to Login.")

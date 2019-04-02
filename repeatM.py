@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
-import urllib.request
 import os
 import sys
 from bs4 import BeautifulSoup
-import time
 import getpass
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
-chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\chromedriver"
+chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/chromedriver"
 options = webdriver.ChromeOptions()
 #options.add_argument("headless")
 driver = webdriver.Chrome(executable_path= chrome_driver_path, chrome_options= options)
@@ -26,7 +24,7 @@ def login(username, password):
 	Driver logs into WebAdmin.
 	"""
 	driver.get('https://www.reg.uci.edu')
-	studentAccess = driver.find_element_by_link_text("WebAdmin")
+	studentAccess = driver.find_element_by_link_text("StudentAccess")
 	studentAccess.click()
 
 	login = driver.find_element_by_link_text("Click here to Login.")
@@ -109,11 +107,17 @@ if __name__ == "__main__":
 	username, password = get_credentials()
 	
 	login(username, password)
-	enter_id("13588198")
 	view_transcript()
 
 	transcript_download = download_page_source()
 	list_classes = parse_classes(transcript_download)
 	classes_repeated = check_repeat(list_classes)
 
-	print(classes_repeated)
+	print("ICS classes taken")
+	for c in list_classes:
+		print(c)
+
+	if classes_repeated == []:
+		print("\nNo classes repeated two or more times\n")
+	else:
+		print(classes_repeated)

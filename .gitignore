@@ -2,3 +2,4 @@ chromedriver
 build/
 __pycache__/
 hooks/
+input.txt

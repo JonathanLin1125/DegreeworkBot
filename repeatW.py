@@ -12,7 +12,7 @@ file_path = os.path.realpath(__file__)
 chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\chromedriver"
 options = webdriver.ChromeOptions()
 #options.add_argument("headless")
-driver = webdriver.Chrome(executable_path= chrome_driver_path, chrome_options= options)
+driver = webdriver.Chrome(executable_path= chrome_driver_path, options= options)
 
 school_classes = ["I&C SCI", "MATH", "IN4MATX", "COMPSCI", "STATS"]
 passing_grades = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "P"]

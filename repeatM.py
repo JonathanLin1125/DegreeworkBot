@@ -9,6 +9,10 @@ from selenium.webdriver.common.keys import Keys
 from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
+input_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/input.txt"
+output_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output.txt"
+log_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/log.txt"
+
 chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/chromedriver"
 options = webdriver.ChromeOptions()
 #options.add_argument("headless")
@@ -24,7 +28,7 @@ def login(username, password):
 	Driver logs into WebAdmin.
 	"""
 	driver.get('https://www.reg.uci.edu')
-	studentAccess = driver.find_element_by_link_text("StudentAccess")
+	studentAccess = driver.find_element_by_link_text("WebAdmin")
 	studentAccess.click()
 
 	login = driver.find_element_by_link_text("Click here to Login.")
@@ -103,21 +107,55 @@ def get_credentials():
 	password = getpass.getpass("Enter password: ")
 	return username.strip(), password.strip()
 
-if __name__ == "__main__":
+def main():
+	"""
+	Main module
+	"""
+
 	username, password = get_credentials()
-	
 	login(username, password)
-	view_transcript()
 
-	transcript_download = download_page_source()
-	list_classes = parse_classes(transcript_download)
-	classes_repeated = check_repeat(list_classes)
+	exists = os.path.isfile(input_file_path)
+	if exists:
+		file = open(input_file_path, "r")
+		log = open(log_file_path, "w")
+		output = open(output_file_path, "w")
 
-	print("ICS classes taken")
-	for c in list_classes:
-		print(c)
+		list_id = file.read().split("\n")
+		for id in list_id:
+			enter_id(id.strip())
+			view_transcript()
 
-	if classes_repeated == []:
-		print("\nNo classes repeated two or more times\n")
+			transcript_download = download_page_source()
+			list_classes = parse_classes(transcript_download)
+			classes_repeated = check_repeat(list_classes)
+
+			passed = (class_repeated == [])
+			log.write(id + "\n" + "Passed: " + "\t" + str(passed) + "\n")
+
+			if class_repeated != []:
+				output.write(id + "\n")
+
+		file.close()
+		log.close()
+		output.close()
 	else:
-		print(classes_repeated)
+		print("input.txt is missing.\n")
+
+if __name__ == "__main__":
+	main()
+	
+	# transcript_download = download_page_source()
+	# list_classes = parse_classes(transcript_download)
+	# classes_repeated = check_repeat(list_classes)
+
+
+
+	# print("ICS classes taken")
+	# for c in list_classes:
+	# 	print(c)
+
+	# if classes_repeated == []:
+	# 	print("\nNo classes repeated two or more times\n")
+	# else:
+	# 	print(classes_repeated)

@@ -16,9 +16,13 @@ from selenium.common.exceptions import TimeoutException
 from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
+input_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/input.txt"
+output_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output.txt"
+log_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/log.txt"
 chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/chromedriver"
+
 options = webdriver.ChromeOptions()
-options.add_argument("headless")
+#options.add_argument("headless")
 driver = webdriver.Chrome(executable_path= chrome_driver_path, chrome_options= options)
 
 gpa_scale = {"A+": 4.0, "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+": 2.3, "C": 2.0, "C-": 1.7, "D+": 1.3, "D": 1.0, "D-": 0.7, "F": 0.0}
@@ -45,6 +49,16 @@ def login(username, password):
 	pass_word = driver.find_element_by_id("password")
 	pass_word.send_keys(password, Keys.ENTER)
 
+def enter_id(id_num):
+	"""
+	Driver enters an id for WebAdmin
+	"""
+	welcome = driver.find_element_by_link_text("Welcome")
+	welcome.click()
+
+	id_no = driver.find_element_by_name("_sid")
+	id_no.send_keys(id_num, Keys.ENTER)
+
 def view_degree_works():
 	"""
 	Driver views Degree Works.
@@ -58,7 +72,7 @@ def go_back_to_access():
 	"""
 	driver.switch_to_default_content()
 	driver.switch_to.frame("frHeader")
-	access = driver.find_element_by_link_text("Back to StudentAccess")
+	access = driver.find_element_by_link_text("Back to WebAdmin")
 	access.click()
 
 def view_transcript():
@@ -272,35 +286,109 @@ def get_credentials():
 	password = getpass.getpass("Enter password: ")
 	return username.strip(), password.strip()
 
+def write_log(log, id_num, units, o_gpa, u_gpa, completed, majors, minors, letter_grade, overlap):
+	"""
+	Writes log given all information
+	"""
+
+	log.write(id_num + "\n")
+	log.write("Total Units: " + str(units) + "\n")
+	log.write("Overall GPA: " + str(o_gpa) + "\n") 	
+	log.write("Upper Div GPA: " + str(u_gpa) + "\n")
+	log.write("Completed all courses? " + str(completed) + "\n")
+	log.write("Major(s): " + str(majors) + "\n")
+	log.write("Minor(s): " + str(minors) + "\n")
+	log.write("All major classes taken with letter grade? " + str(letter_grade) + "\n")
+	log.write("All minors do not have 5 or more overlapping with major? " + str(overlap) + "\n\n")
+
+def write_output(output, id_num, units, o_gpa, u_gpa, completed, letter_grade, overlap):
+	"""
+	Writes output for students who do not meet graduation requirements.
+	"""
+	output.write(id_num + "\n")
+
+	if units < 180:
+		output.write("Total Units: " + str(units) + " is below 180.\n")
+	if o_gpa < 2.00:
+		output.write("Overall GPA: " + str(o_gpa) + " is below 2.0.\n") 	
+	if u_gpa < 2.00:
+		output.write("Upper Div GPA: " + str(u_gpa) + " is below 2.0\n")
+	if completed == False:
+		output.write("Completed all courses? " + str(completed) + "\n")
+	if letter_grade == False:
+		output.write("All major classes taken with letter grade? " + str(letter_grade) + "\n")
+	if overlap == False:
+		output.write("All minors do not have 5 or more overlapping with major? " + str(overlap) + "\n")
+	output.write("\n")
+
 def retrieve_information():
 	"""
 	Retrieves all information given a driver that is on a student's studentaccess.
 	"""
-	view_transcript()
-	transcript_source = download_transcript_source()
-	u_gpa = find_upper_gpa(transcript_source)
+	# view_transcript()
+	# transcript_source = download_transcript_source()
+	# u_gpa = find_upper_gpa(transcript_source)
 
-	view_degree_works()
-	degree_source = download_degree_source()
+	# view_degree_works()
+	# degree_source = download_degree_source()
 
-	majors, minors = find_major_minor(degree_source)
-	units = find_units(degree_source)
-	o_gpa = find_overall_gpa(degree_source)
-	completed = is_complete(degree_source)
-	major_classes, minor_classes = find_all_major_minor(degree_source, majors, minors)
-	letter_grade = is_all_letter_grade(major_classes)
-	overlap = is_overlapping_major_minor(major_classes, minor_classes)
+	# majors, minors = find_major_minor(degree_source)
+	# units = find_units(degree_source)
+	# o_gpa = find_overall_gpa(degree_source)
+	# completed = is_complete(degree_source)
+	# major_classes, minor_classes = find_all_major_minor(degree_source, majors, minors)
+	# letter_grade = is_all_letter_grade(major_classes)
+	# overlap = is_overlapping_major_minor(major_classes, minor_classes)
 
-	print("\nTotal Units: ", units)
-	print("Overall GPA: ", o_gpa)
-	print("Upper Div GPA: ", u_gpa)
-	print("Completed all courses? ", completed)
-	print("Major(s): ", majors)
-	print("Minor(s): ", minors)
-	print("All major classes taken with letter grade? ", letter_grade)
-	print("All minors do not have 5 or more overlapping with major? ", overlap)
-	print("")
-	go_back_to_access()
+	# print("\nTotal Units: ", units)
+	# print("Overall GPA: ", o_gpa)
+	# print("Upper Div GPA: ", u_gpa)
+	# print("Completed all courses? ", completed)
+	# print("Major(s): ", majors)
+	# print("Minor(s): ", minors)
+	# print("All major classes taken with letter grade? ", letter_grade)
+	# print("All minors do not have 5 or more overlapping with major? ", overlap)
+	# print("")
+	# go_back_to_access()
+
+	username, password = get_credentials()
+	login(username, password)
+
+	exists = os.path.isfile(input_file_path)
+	if exists:
+		file = open(input_file_path, "r")
+		log = open(log_file_path, "w")
+		output = open(output_file_path, "w")
+
+		list_id = file.read().split("\n")
+		for id_num in list_id:
+			enter_id(id_num.strip())
+		
+			view_transcript()
+			transcript_source = download_transcript_source()
+			u_gpa = find_upper_gpa(transcript_source)
+
+			view_degree_works()
+			degree_source = download_degree_source()
+
+			majors, minors = find_major_minor(degree_source)
+			units = find_units(degree_source)
+			o_gpa = find_overall_gpa(degree_source)
+			completed = is_complete(degree_source)
+			major_classes, minor_classes = find_all_major_minor(degree_source, majors, minors)
+			letter_grade = is_all_letter_grade(major_classes)
+			overlap = is_overlapping_major_minor(major_classes, minor_classes)	
+
+			write_log(log, id_num, units, o_gpa, u_gpa, completed, majors, minors, letter_grade, overlap)
+
+			if (units < 180 or o_gpa < 2.00 or u_gpa < 2.00 or completed == False or letter_grade == False or overlap == False):
+				write_output(output, id_num, units, o_gpa, u_gpa, completed, letter_grade, overlap)
+
+		file.close()
+		log.close()
+		output.close()
+	else:
+		print("input.txt is missing.\n")
 
 if __name__ == "__main__":
 	username, password = get_credentials()

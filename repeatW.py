@@ -39,7 +39,7 @@ def login(username, password):
 	pass_word = driver.find_element_by_id("password")
 	pass_word.send_keys(password, Keys.ENTER)
 
-def enter_id(id):
+def enter_id(id_num):
 	"""
 	Driver enters an id for WebAdmin
 	"""
@@ -47,7 +47,7 @@ def enter_id(id):
 	welcome.click()
 
 	id_no = driver.find_element_by_name("_sid")
-	id_no.send_keys(id, Keys.ENTER)
+	id_no.send_keys(id_num, Keys.ENTER)
 
 def view_transcript():
 	"""
@@ -122,8 +122,8 @@ def main():
 		output = open(output_file_path, "w")
 
 		list_id = file.read().split("\n")
-		for id in list_id:
-			enter_id(id.strip())
+		for id_num in list_id:
+			enter_id(id_num.strip())
 			view_transcript()
 
 			transcript_download = download_page_source()
@@ -131,10 +131,10 @@ def main():
 			classes_repeated = check_repeat(list_classes)
 
 			passed = (class_repeated == [])
-			log.write(id + "\n" + "Passed: " + "\t" + str(passed) + "\n")
+			log.write(id_num + "\n" + "Passed: " + "\t" + str(passed) + "\n\n")
 
 			if class_repeated != []:
-				output.write(id + "\n")
+				output.write(id_num + "\n\n")
 
 		file.close()
 		log.close()

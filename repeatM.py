@@ -10,7 +10,9 @@ from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
 input_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/input.txt"
-output_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output.txt"
+output30_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output30.txt"
+output40_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output40.txt"
+output50_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output50.txt"
 log_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/log.txt"
 
 chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/chromedriver"
@@ -19,6 +21,7 @@ options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(executable_path= chrome_driver_path, chrome_options= options)
 
 school_classes = ["I&C SCI", "MATH", "IN4MATX", "COMPSCI", "STATS"]
+class_tracked = ["I&C SCI 31", "I&C SCI 32", "I&C SCI 32A", "I&C SCI 33", "I&C SCI 45C", "I&C SCI 45J", "I&C SCI 46", "I&C SCI 51", "I&C SCI 53"]
 passing_grades = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "P"]
 
 """Driver functions
@@ -75,7 +78,7 @@ def parse_classes(page_source):
 	list_classes = []
 	index = 0
 	while index < len(class_text):
-		if class_text[index] in school_classes:
+		if class_text[index] in school_classes and (class_text[index] + " " + class_text[index+1]) in class_tracked:
 			list_classes.append((class_text[index] + " " + class_text[index+1], class_text[index+3]))
 			index += 4
 		else:
@@ -93,9 +96,16 @@ def check_repeat(list_classes):
 	for course, grade in list_classes:
 		if grade not in passing_grades:
 			if course == "I&C SCI 32" or course == "I&C SCI 32A":
-				times_failed["I&C SCI 32/32A"] += 1
+                                if times_failed["I&C SCI 32/32A"] != -1:
+                                        times_failed["I&C SCI 32/32A"] += 1
 			else:
-				times_failed[course] += 1
+                                if times_failed[course] != -1:
+                                        times_failed[course] += 1
+		else:
+                        if course == "I&C SCI 32" or course == "I&C SCI 32A":
+                                times_failed["I&C SCI 32/32A"] = -1
+                        else:
+                                times_failed[course] = -1
 
 	return [course[0] for course in times_failed.items() if course[1] >= 2]
 
@@ -119,7 +129,9 @@ def main():
 	if exists:
 		file = open(input_file_path, "r")
 		log = open(log_file_path, "w")
-		output = open(output_file_path, "w")
+		output30 = open(output30_file_path, "w")
+		output40 = open(output40_file_path, "w")
+		output50 = open(output50_file_path, "w")
 
 		list_id = file.read().split("\n")
 		for id_num in list_id:
@@ -134,14 +146,23 @@ def main():
 			log.write(id_num + "\n" + "Passed: " + "\t" + str(passed) + "\n\n")
 
 			if classes_repeated != []:
-				output.write(id_num + "\n" + str(classes_repeated) + "\n\n")
+                                if "I&C SCI 31" in classes_repeated or "I&C SCI 32/32A" in classes_repeated or "I&C SCI 33" in classes_repeated:
+                                        output30.write(id_num + "\n" + str(classes_repeated) + "\n\n")
+                                if "I&C SCI 45C" in classes_repeated or "I&C SCI 45J" in classes_repeated or "I&C SCI 46" in classes_repeated:
+                                        output40.write(id_num + "\n" + str(classes_repeated) + "\n\n")
+                                if "I&C SCI 51" in classes_repeated or "I&C SCI 53" in classes_repeated:
+                                        output50.write(id_num + "\n" + str(classes_repeated) + "\n\n")
+
 
 		file.close()
 		log.close()
-		output.close()
+		output30.close()
+		output40.close()
+		output50.close()
 	else:
 		print("input.txt is missing.\n")
 
 if __name__ == "__main__":
 	main()
 	
+

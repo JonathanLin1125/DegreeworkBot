@@ -70,7 +70,7 @@ def go_back_to_access():
 	"""
 	Driver goes back to studentaccess from degreeworks.
 	"""
-	driver.switch_to_default_content()
+	driver.switch_to.default_content()
 	driver.switch_to.frame("frHeader")
 	access = driver.find_element_by_link_text("Back to WebAdmin")
 	access.click()
@@ -93,7 +93,7 @@ def download_degree_source():
 	Downloads the current page driver is on. (degreeworks)
 	NOTE: Framesets are automatically expanded, to expand a frame, you must switch into it.
 	"""
-	driver.switch_to_default_content()
+	driver.switch_to.default_content()
 	driver.switch_to.frame("frBodyContainer")
 	driver.switch_to.frame("frBody")
 	return driver.page_source
@@ -325,31 +325,6 @@ def retrieve_information():
 	"""
 	Retrieves all information given a driver that is on a student's studentaccess.
 	"""
-	# view_transcript()
-	# transcript_source = download_transcript_source()
-	# u_gpa = find_upper_gpa(transcript_source)
-
-	# view_degree_works()
-	# degree_source = download_degree_source()
-
-	# majors, minors = find_major_minor(degree_source)
-	# units = find_units(degree_source)
-	# o_gpa = find_overall_gpa(degree_source)
-	# completed = is_complete(degree_source)
-	# major_classes, minor_classes = find_all_major_minor(degree_source, majors, minors)
-	# letter_grade = is_all_letter_grade(major_classes)
-	# overlap = is_overlapping_major_minor(major_classes, minor_classes)
-
-	# print("\nTotal Units: ", units)
-	# print("Overall GPA: ", o_gpa)
-	# print("Upper Div GPA: ", u_gpa)
-	# print("Completed all courses? ", completed)
-	# print("Major(s): ", majors)
-	# print("Minor(s): ", minors)
-	# print("All major classes taken with letter grade? ", letter_grade)
-	# print("All minors do not have 5 or more overlapping with major? ", overlap)
-	# print("")
-	# go_back_to_access()
 
 	username, password = get_credentials()
 	login(username, password)
@@ -370,6 +345,7 @@ def retrieve_information():
 
 			view_degree_works()
 			degree_source = download_degree_source()
+			go_back_to_access()
 
 			majors, minors = find_major_minor(degree_source)
 			units = find_units(degree_source)
@@ -391,8 +367,5 @@ def retrieve_information():
 		print("input.txt is missing.\n")
 
 if __name__ == "__main__":
-	username, password = get_credentials()
-	login(username, password)
-
 	retrieve_information()
 

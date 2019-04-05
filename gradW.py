@@ -56,7 +56,7 @@ def enter_id(id_num):
 	welcome = driver.find_element_by_link_text("Welcome")
 	welcome.click()
 
-	id_no = driver.find_element_by_name("_sid")
+	id_no = driver.find_element_by_name("sid")
 	id_no.send_keys(id_num, Keys.ENTER)
 
 def view_degree_works():

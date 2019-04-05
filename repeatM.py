@@ -46,7 +46,7 @@ def enter_id(id_num):
 	welcome = driver.find_element_by_link_text("Welcome")
 	welcome.click()
 
-	id_no = driver.find_element_by_name("_sid")
+	id_no = driver.find_element_by_name("sid")
 	id_no.send_keys(id_num, Keys.ENTER)
 
 def view_transcript():
@@ -130,11 +130,11 @@ def main():
 			list_classes = parse_classes(transcript_download)
 			classes_repeated = check_repeat(list_classes)
 
-			passed = (class_repeated == [])
+			passed = (classes_repeated == [])
 			log.write(id_num + "\n" + "Passed: " + "\t" + str(passed) + "\n\n")
 
-			if class_repeated != []:
-				output.write(id_num + "\n\n")
+			if classes_repeated != []:
+				output.write(id_num + "\n" + str(classes_repeated) + "\n\n")
 
 		file.close()
 		log.close()
@@ -145,17 +145,3 @@ def main():
 if __name__ == "__main__":
 	main()
 	
-	# transcript_download = download_page_source()
-	# list_classes = parse_classes(transcript_download)
-	# classes_repeated = check_repeat(list_classes)
-
-
-
-	# print("ICS classes taken")
-	# for c in list_classes:
-	# 	print(c)
-
-	# if classes_repeated == []:
-	# 	print("\nNo classes repeated two or more times\n")
-	# else:
-	# 	print(classes_repeated)

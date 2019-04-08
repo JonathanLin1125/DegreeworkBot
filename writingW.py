@@ -109,9 +109,10 @@ def lower_writing_complete(page_source):
 			if (block_name == "General Education Requirements"):
 				ge_sections = block_name.find_all('tr', attrs={'class': 'bgLight0'})
 				for ge in ge_sections:
-					title = ge.find('td', attrs={'class': 'RuleLabelTitleNotNeeded'})
-					if title == "I. Lower-Division Writing (minimum grade C)":
-						return False
+					titles = ge.find_all('td', attrs={'class': 'RuleLabelTitleNotNeeded'})
+					for title in titles:
+						if title.text.strip() == "I. Lower-Division Writing (minimum grade C)":
+							return False
 	except:
 		pass
 	return True

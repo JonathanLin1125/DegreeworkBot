@@ -9,16 +9,16 @@ from selenium.webdriver.common.keys import Keys
 from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
-input_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "input.txt")
-output30_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "output30.txt")
-output40_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "output40.txt")
-output50_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "output50.txt")
-log_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "log.txt")
+input_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/input.txt"
+output30_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output30.txt"
+output40_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output40.txt"
+output50_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/output50.txt"
+log_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/log.txt"
 
-chrome_driver_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "chromedriver")
+chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "/chromedriver"
 options = webdriver.ChromeOptions()
 #options.add_argument("headless")
-driver = webdriver.Chrome(executable_path= chrome_driver_path, options= options)
+driver = webdriver.Chrome(executable_path= chrome_driver_path, chrome_options= options)
 
 school_classes = ["I&C SCI", "MATH", "IN4MATX", "COMPSCI", "STATS"]
 class_tracked = ["I&C SCI 31", "I&C SCI 32", "I&C SCI 32A", "I&C SCI 33", "I&C SCI 45C", "I&C SCI 45J", "I&C SCI 46", "I&C SCI 51", "I&C SCI 53"]

@@ -16,10 +16,10 @@ from selenium.common.exceptions import TimeoutException
 from collections import defaultdict
 
 file_path = os.path.realpath(__file__)
-input_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\input.txt"
-output_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\output.txt"
-log_file_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\log.txt"
-chrome_driver_path = os.path.dirname(os.path.realpath(sys.argv[0])) + "\\chromedriver"
+input_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "input.txt")
+output_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "output.txt")
+log_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "log.txt")
+chrome_driver_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "chromedriver")
 
 options = webdriver.ChromeOptions()
 #options.add_argument("headless")

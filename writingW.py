@@ -143,15 +143,15 @@ def retrieve_information():
 			enter_id(id_num.strip())
 			view_degree_works()
 			page_source = download_degree_source()
+			go_back_to_access()
 
 			lwd_complete = lower_writing_complete(page_source)
 
 			log.write(id_num + "\n" + str(lwd_complete) + "\n\n")
 			if not lwd_complete:
-				output.write(id_num "\n")
+				output.write(id_num + "\n")
 
 
-	print(lower_writing_complete(page_source))
 
 if __name__ == "__main__":
 	retrieve_information()

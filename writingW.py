@@ -102,19 +102,16 @@ def lower_writing_complete(page_source):
 	soup = BeautifulSoup(page_source, features="html.parser")
 	sections = soup.body.find_all('table', attrs={'border': "0"})
 
-	try:
 
-		for section in sections:
-			block_name = section.find('td', attrs={'class': "BlockHeadTitle"}).text.strip()
-			if (block_name == "General Education Requirements"):
-				ge_sections = block_name.find_all('tr', attrs={'class': 'bgLight0'})
-				for ge in ge_sections:
-					titles = ge.find_all('td', attrs={'class': 'RuleLabelTitleNotNeeded'})
-					for title in titles:
-						if title.text.strip() == "I. Lower-Division Writing (minimum grade C)":
-							return False
-	except:
-		pass
+	for section in sections:
+		block_name = section.find('td', attrs={'class': "BlockHeadTitle"})
+		if block_name != None and block_name.text.strip() == "General Education Requirements":
+			ge_sections = section.find_all('tr', attrs={'class': 'bgLight0'})
+			for ge in ge_sections:
+				titles = ge.find_all('td', attrs={'class': 'RuleLabelTitleNeeded'})
+				for title in titles:
+					if title.text.strip() == "I. Lower-Division Writing (minimum grade C)" :
+						return False	
 	return True
 
 def get_credentials():
@@ -152,6 +149,9 @@ def retrieve_information():
 			if not lwd_complete:
 				output.write(id_num + "\n")
 
+		file.close()
+		log.close()
+		output.close()
 
 
 if __name__ == "__main__":

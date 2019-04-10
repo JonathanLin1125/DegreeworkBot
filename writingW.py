@@ -102,16 +102,14 @@ def lower_writing_complete(page_source):
 	soup = BeautifulSoup(page_source, features="html.parser")
 	sections = soup.body.find_all('table', attrs={'border': "0"})
 
-
 	for section in sections:
 		block_name = section.find('td', attrs={'class': "BlockHeadTitle"})
 		if block_name != None and block_name.text.strip() == "General Education Requirements":
 			ge_sections = section.find_all('tr', attrs={'class': 'bgLight0'})
 			for ge in ge_sections:
-				titles = ge.find_all('td', attrs={'class': 'RuleLabelTitleNeeded'})
-				for title in titles:
-					if title.text.strip() == "I. Lower-Division Writing (minimum grade C)" :
-						return False	
+				title = ge.find('td', attrs={'class': 'RuleLabelTitleNeeded'})	
+				if title != None and (title.text.strip() == "I. Lower-Division Writing (minimum grade C)"):
+					return False	
 	return True
 
 def get_credentials():

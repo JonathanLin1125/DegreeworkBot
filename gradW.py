@@ -4,6 +4,7 @@ import urllib.request
 import os
 import sys
 from bs4 import BeautifulSoup
+import csv
 import time
 import getpass
 import re

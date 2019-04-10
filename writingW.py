@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import urllib.request
+import csv
 import os
 import sys
 from bs4 import BeautifulSoup
@@ -111,6 +112,29 @@ def lower_writing_complete(page_source):
 				if title != None and (title.text.strip() == "I. Lower-Division Writing (minimum grade C)"):
 					return False	
 	return True
+
+def find_name(page_source):
+	"""
+	Given a page souce of unofficial transcript
+	Returns the student's name.
+	"""
+	soup = BeautifulSoup(page_source, features="html.parser")
+	name = soup.body.find('span', attrs{'onmouseout': 'kill()'}).text.strip()
+	return name
+
+def find_email(page_source):
+	"""
+	Given a page source of unofficial transcript
+	Returns the student's email.
+	"""
+	soup = BeautifulSoup(page_source, features='html.parser')
+	email_locations = soup.body.find_all('td')
+
+	for email in email_locations:
+		if re.match("^[A-Za-z0-9]*@uci\.edu$", email.text.strip()):
+			return email.text.strip()
+	return "NULL"
+
 
 def get_credentials():
 	"""

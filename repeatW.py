@@ -3,6 +3,7 @@
 import os
 import sys
 from bs4 import BeautifulSoup
+import csv
 import getpass
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys

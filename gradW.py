@@ -200,11 +200,17 @@ def find_major_minor(page_source):
 	for section in sections:
 		row = section.text.strip().split("\n")
 		if row[0] == "Grad App Status":
-			start_index = row.index("Major")
+			if "Major" in row:
+				start_index = row.index("Major")
+			elif "Majors" in row:
+				start_index = row.index("Majors")
 			for index in range(start_index + 1, len(row)):
 				list_majors.append(row[index])
 		if row[0] == "Overall GPA":
-			start_index = row.index("Minor")
+			if "Minor" in row:
+				start_index = row.index("Minor")
+			elif "Minors" in row:
+				start_index = row.index("Minors")
 			for index in range(start_index + 1, len(row)):
 				list_minors.append(row[index])
 	return list_majors, list_minors

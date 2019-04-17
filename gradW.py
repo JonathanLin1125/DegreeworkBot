@@ -20,6 +20,7 @@ file_path = os.path.realpath(__file__)
 input_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "input.txt")
 output_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "output.txt")
 log_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "log.txt")
+csv_file_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "csvoutput.csv")
 chrome_driver_path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), "chromedriver")
 
 options = webdriver.ChromeOptions()
@@ -308,6 +309,26 @@ def write_log(log, id_num, units, o_gpa, u_gpa, completed, majors, minors, lette
 	log.write("All major classes taken with letter grade? " + str(letter_grade) + "\n")
 	log.write("All minors do not have 5 or more overlapping with major? " + str(overlap) + "\n\n")
 
+def string_output(units, o_gpa, u_gpa, completed, letter_grade, overlap):
+	"""
+	Returns output for students who do not meet graduation requirements.
+	"""
+	string = ""
+
+	if units < 180:
+		string += ("Total Units: " + str(units) + " is below 180.\n")
+	if o_gpa < 2.00:
+		string += ("Overall GPA: " + str(o_gpa) + " is below 2.0.\n") 	
+	if u_gpa < 2.00:
+		string += ("Upper Div GPA: " + str(u_gpa) + " is below 2.0\n")
+	if completed == False:
+		string += ("Completed all courses? " + str(completed) + "\n")
+	if letter_grade == False:
+		string += ("All major classes taken with letter grade? " + str(letter_grade) + "\n")
+	if overlap == False:
+		string += ("All minors do not have 5 or more overlapping with major? " + str(overlap) + "\n")
+	return string
+
 def write_output(output, id_num, units, o_gpa, u_gpa, completed, letter_grade, overlap):
 	"""
 	Writes output for students who do not meet graduation requirements.
@@ -340,9 +361,12 @@ def retrieve_information():
 		file = open(input_file_path, "r")
 		log = open(log_file_path, "w")
 		output = open(output_file_path, "w")
+		csv_output = open(csv_file_path, "w", newline='', encoding='utf-8-sig')
+		csv_writer = csv.writer(csv_output)
 
 		list_id = file.read().split("\n")
 		for id_num in list_id:
+			csv_flag = "YES"
 			enter_id(id_num.strip())
 		
 			view_transcript()
@@ -364,11 +388,14 @@ def retrieve_information():
 			write_log(log, id_num, units, o_gpa, u_gpa, completed, majors, minors, letter_grade, overlap)
 
 			if (units < 180 or o_gpa < 2.00 or u_gpa < 2.00 or completed == False or letter_grade == False or overlap == False):
+				csv_flag = "NO"
 				write_output(output, id_num, units, o_gpa, u_gpa, completed, letter_grade, overlap)
+			csv_writer.writerow([id_num, csv_flag, string_output(units, o_gpa, u_gpa, completed, letter_grade, overlap)])
 
 		file.close()
 		log.close()
 		output.close()
+		csv_output.close()
 	else:
 		print("input.txt is missing.\n")
 

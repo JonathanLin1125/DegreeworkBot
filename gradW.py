@@ -149,8 +149,7 @@ def find_major_courses(page_source, major):
 							for course in courses:
 								course_title = course.find('td', attrs={'class': "CourseAppliedDataDiscNum"}).text.strip()
 								course_grade = course.find('td', attrs={'class': 'CourseAppliedDataGrade'}).text.strip()
-								if "(T)" not in course_title and course_grade != "T" and course_grade != "IP":
-									list_courses.add((course_title, course_grade))
+								list_courses.add((course_title, course_grade))
 						except:
 							pass
 					break
@@ -179,8 +178,8 @@ def find_minor_courses(page_source, minor):
 							for course in courses:
 								course_title = course.find('td', attrs={'class': "CourseAppliedDataDiscNum"}).text.strip()
 								course_grade = course.find('td', attrs={'class': 'CourseAppliedDataGrade'}).text.strip()
-								if "(T)" not in course_title and course_grade != "T" and course_grade != "IP":
-									list_courses.add((course_title, course_grade))
+								#if "(T)" not in course_title and course_grade != "T" and course_grade != "IP":
+								list_courses.add((course_title, course_grade))
 						except:
 							pass
 					break
@@ -269,12 +268,13 @@ def is_overlapping_major_minor(major_classes, minor_classes):
 	"""
 	for major in major_classes:
 		for minor in minor_classes:
-			unique_class = 0
-			for course in minor_classes[minor]:
-				if course not in major_classes[major]:
-					unique_class += 1
-			if unique_class < 5:
-				return False 
+                        if minor in ics_minors:
+                                unique_class = 0
+                                for course in minor_classes[minor]:
+                                        if course not in major_classes[major]:
+                                                unique_class += 1
+                                if unique_class < 5:
+                                        return False 
 	return True
 
 def is_complete(page_source):

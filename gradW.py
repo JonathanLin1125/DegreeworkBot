@@ -247,7 +247,8 @@ def find_all_major_minor(page_source, majors, minors):
 		if major in ics_majors:
 			major_classes[major] = find_major_courses(page_source, major)
 	for minor in minors:
-		minor_classes[minor] = find_minor_courses(page_source, minor)
+		if minor in ics_minors:
+			minor_classes[minor] = find_minor_courses(page_source, minor)
 	return major_classes, minor_classes
 
 def is_all_letter_grade(major_classes):
@@ -268,13 +269,13 @@ def is_overlapping_major_minor(major_classes, minor_classes):
 	"""
 	for major in major_classes:
 		for minor in minor_classes:
-                        if minor in ics_minors:
-                                unique_class = 0
-                                for course in minor_classes[minor]:
-                                        if course not in major_classes[major]:
-                                                unique_class += 1
-                                if unique_class < 5:
-                                        return False 
+                  
+                            unique_class = 0
+                            for course in minor_classes[minor]:
+                                    if course not in major_classes[major]:
+                                            unique_class += 1
+                            if unique_class < 5:
+                                    return False 
 	return True
 
 def is_complete(page_source):

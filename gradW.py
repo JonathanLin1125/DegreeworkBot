@@ -212,7 +212,10 @@ def find_major_minor(page_source):
 			elif "Minors" in row:
 				start_index = row.index("Minors")
 			for index in range(start_index + 1, len(row)):
-				list_minors.append(row[index])
+				if row[index] == "Information & Computer Sci":
+					list_minors.append("Information and Computer Science")
+				else:
+					list_minors.append(row[index])
 	return list_majors, list_minors
 
 def find_upper_gpa(page_source):

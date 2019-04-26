@@ -31,7 +31,7 @@ gpa_scale = {"A+": 4.0, "A": 4.0, "A-": 3.7, "B+": 3.3, "B": 3.0, "B-": 2.7, "C+
 school_classes = ["I&C SCI", "MATH", "IN4MATX", "COMPSCI", "STATS"]
 ics_majors = ["Business Information Management", "Computer Science", "Computer Game Science", "Computer Science and Engineering", "Data Science", "Software Engineering", "Informatics"]
 ics_minors = ["Bioinformatics", "Digital Information Systems", "Health Informatics", "Informatics", "Information and Computer Science", "Information & Computer Sci", "Statistics"]
-pnp_classes = ["I&CSCI 90"]
+pnp_classes = ["I&CSCI 90", "STATS 5"]
 
 """Driver functions
 """
